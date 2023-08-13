@@ -195,7 +195,7 @@ class Paths
 			return file;
 		}
 		#end
-		return 'songs:assets/songs/${song.toLowerCase().replace(' ', '-')}/Inst.$SOUND_EXT';
+		return SUtil.getPath() + 'songs:assets/songs/${song.toLowerCase().replace(' ', '-')}/Inst.$SOUND_EXT';
 	}
 
 	#if MODS_ALLOWED
@@ -205,7 +205,7 @@ class Paths
 			if(!customSoundsLoaded.exists(file)) {
 				customSoundsLoaded.set(file, Sound.fromFile(file));
 			}
-			return SUtil.getPath() + customSoundsLoaded.get(file);
+			return customSoundsLoaded.get(file);
 		}
 		return null;
 	}
