@@ -73,23 +73,23 @@ class Paths
 	public static function getPath(file:String, type:AssetType, ?library:Null<String> = null)
 	{
 		if (library != null)
-			return getLibraryPath(file, library);
+			return SUtil.getPath() + getLibraryPath(file, library);
 
 		if (currentLevel != null)
 		{
 			var levelPath:String = '';
 			if(currentLevel != 'shared') {
-				levelPath = getLibraryPathForce(file, currentLevel);
+				levelPath = SUtil.getPath() + getLibraryPathForce(file, currentLevel);
 				if (OpenFlAssets.exists(levelPath, type))
-					return levelPath;
+					return SUtil.getPath() + levelPath;
 			}
 
-			levelPath = getLibraryPathForce(file, "shared");
+			levelPath = SUtil.getPath() + getLibraryPathForce(file, "shared");
 			if (OpenFlAssets.exists(levelPath, type))
-				return levelPath;
+				return SUtil.getPath() + levelPath;
 		}
 
-		return getPreloadPath(file);
+		return SUtil.getPath() + getPreloadPath(file);
 	}
 
 	static public function getLibraryPath(file:String, library = "preload")
@@ -104,7 +104,7 @@ class Paths
 
 	inline public static function getPreloadPath(file:String = '')
 	{
-		return 'assets/$file';
+		return SUtil.getPath() + 'assets/$file';
 	}
 
 	inline static public function file(file:String, type:AssetType = TEXT, ?library:String)
@@ -140,7 +140,7 @@ class Paths
 			return file;
 		}
 		#end
-		return 'assets/videos/$key.$VIDEO_EXT';
+		return SUtil.getPath() + 'assets/videos/$key.$VIDEO_EXT';
 	}
 
 	static public function sound(key:String, ?library:String):Dynamic
@@ -154,7 +154,7 @@ class Paths
 			return customSoundsLoaded.get(file);
 		}
 		#end
-		return getPath('sounds/$key.$SOUND_EXT', SOUND, library);
+		return SUtil.getPath() + getPath('sounds/$key.$SOUND_EXT', SOUND, library);
 	}
 	
 	inline static public function soundRandom(key:String, min:Int, max:Int, ?library:String)
@@ -173,7 +173,7 @@ class Paths
 			return customSoundsLoaded.get(file);
 		}
 		#end
-		return getPath('music/$key.$SOUND_EXT', MUSIC, library);
+		return SUtil.getPath() + getPath('music/$key.$SOUND_EXT', MUSIC, library);
 	}
 
 	inline static public function voices(song:String):Any
@@ -184,7 +184,7 @@ class Paths
 			return file;
 		}
 		#end
-		return 'songs:assets/songs/${song.toLowerCase().replace(' ', '-')}/Voices.$SOUND_EXT';
+		return SUtil.getPath() + 'songs:assets/songs/${song.toLowerCase().replace(' ', '-')}/Voices.$SOUND_EXT';
 	}
 
 	inline static public function inst(song:String):Any
@@ -195,7 +195,7 @@ class Paths
 			return file;
 		}
 		#end
-		return 'songs:assets/songs/${song.toLowerCase().replace(' ', '-')}/Inst.$SOUND_EXT';
+		return SUtil.getPath() + 'songs:assets/songs/${song.toLowerCase().replace(' ', '-')}/Inst.$SOUND_EXT';
 	}
 
 	#if MODS_ALLOWED
@@ -205,7 +205,7 @@ class Paths
 			if(!customSoundsLoaded.exists(file)) {
 				customSoundsLoaded.set(file, Sound.fromFile(file));
 			}
-			return customSoundsLoaded.get(file);
+			return SUtil.getPath() + customSoundsLoaded.get(file);
 		}
 		return null;
 	}
@@ -217,17 +217,17 @@ class Paths
 		var imageToReturn:FlxGraphic = addCustomGraphic(key);
 		if(imageToReturn != null) return imageToReturn;
 		#end
-		return getPath('images/$key.png', IMAGE, library);
+		return SUtil.getPath() + getPath('images/$key.png', IMAGE, library);
 	}
 	
 	static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String
 	{
 		#if sys
 		if (!ignoreMods && FileSystem.exists(mods(key)))
-			return File.getContent(mods(key));
+			return SUtil.getPath() + File.getContent(mods(key));
 
 		if (FileSystem.exists(getPreloadPath(key)))
-			return File.getContent(getPreloadPath(key));
+			return SUtil.getPath() + File.getContent(getPreloadPath(key));
 
 		if (currentLevel != null)
 		{
@@ -235,12 +235,12 @@ class Paths
 			if(currentLevel != 'shared') {
 				levelPath = getLibraryPathForce(key, currentLevel);
 				if (FileSystem.exists(levelPath))
-					return File.getContent(levelPath);
+					return SUtil.getPath() + File.getContent(levelPath);
 			}
 
 			levelPath = getLibraryPathForce(key, 'shared');
 			if (FileSystem.exists(levelPath))
-				return File.getContent(levelPath);
+				return SUtil.getPath() + File.getContent(levelPath);
 		}
 		#end
 		return Assets.getText(getPath(key, TEXT));
@@ -248,7 +248,7 @@ class Paths
 
 	inline static public function font(key:String)
 	{
-		return 'assets/fonts/$key';
+		return SUtil.getPath() + 'assets/fonts/$key';
 	}
 
 	inline static public function fileExists(key:String, type:AssetType, ?ignoreMods:Bool = false, ?library:String)
@@ -313,7 +313,7 @@ class Paths
 	}
 
 	inline static public function mods(key:String = '') {
-		return 'mods/' + key;
+		return SUtil.getPath() + 'mods/' + key;
 	}
 
 	inline static public function modsJson(key:String) {
@@ -355,7 +355,7 @@ class Paths
 				return fileToCheck;
 			}
 		}
-		return 'mods/' + key;
+		return SUtil.getPath() + 'mods/' + key;
 	}
 	#end
 }
